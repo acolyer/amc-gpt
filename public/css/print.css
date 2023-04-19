@@ -1,0 +1,8 @@
+@media print {
+    #sendMessageForm {
+        display: none;
+    }
+    #configuration {
+        display: none;
+    }
+}
