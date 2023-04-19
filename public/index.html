@@ -35,15 +35,30 @@
         </section>
     </section>
 
+    <section id="systemMessages">
+      <!-- any messages from the system, e.g. API errors, content rendering errors, etc. -->
+    </section>
+
     <section id="configuration">
       <h2>Settings</h2>
+      <form>
+        <label for="openAIAPIKey">OpenAI API Key:</label>
+        <input type="password" id="openAIAPIKey" required>
+      </form>
     </section>
 
     <section id="thoughts">
+      <!-- thoughts extracted from ChatGPT's responses -->
       <h2>Thoughts</h2>
     </section>
 
+    <section id="reflection">
+      <!-- self-reflection commentary extracted from ChatGPT's responses -->
+      <h2>Critique</h2>
+    </section>
+
     <section id="follow-ups">
+      <!-- Recommended follow-ups extracted from ChatGPT's reponses -->
       <h2>Follow-up questions</h2>
     </section>
 
