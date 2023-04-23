@@ -7,8 +7,9 @@
     "prettier": "^2.8.7"
   },
   "main": "app.mjs",
+  "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "node --experimental-vm-modules $(yarn bin jest)",
     "start": "node app.mjs"
   },
   "dependencies": {
