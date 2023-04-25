@@ -1,0 +1,87 @@
+h1 {
+    text-align: center;
+}
+
+#chat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+#chatHistory {
+    margin: 0 auto;
+    padding: 0px;
+    border-radius: 5px;
+    width: 720px;
+}
+
+.chatMessage {
+    background-color: #fcfcfc;
+    border-radius: 20px;
+    border: 2px solid #dedede;
+    margin: 10px 0;
+    padding: 20px;
+    width: 700px;
+}
+
+.chatMessage.user {
+    float: right;
+}
+
+.chatMessage.assistant {
+    float: left;
+    border-color: #ccc;
+    background-color: #ffffff;
+}
+
+.user img.avatar {
+    float: left;
+    max-width: 60px;
+    width: 100%;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+.assistant img.avatar {
+    float: right;
+    max-width: 60px;
+    width: 100%;
+    margin-left: 20px;
+    margin-right: 0;
+    border-radius: 50%;
+}
+
+.user .metadata {
+    float: right;
+    color: #aaa;
+}
+
+.assistant .metadata {
+    float: left;
+    color: #999;
+}
+
+#sendMessage {
+    padding-top: 20px;
+    padding-left: 30px;
+}
+
+#sendMessageButton {
+    vertical-align: bottom;
+    position: relative;
+    left: 0px;
+    bottom: 5px;
+}
+
+#userMessage {
+    max-width: 720px;
+    width: 100%;
+    height: 50px;
+    line-height: 1.5;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+    font-size: 16px;
+}

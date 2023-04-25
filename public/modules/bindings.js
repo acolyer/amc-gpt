@@ -51,7 +51,7 @@ function addMessageMetadata(container, role, usage, numImages, cost) {
     metadataElement.classList.add("metadata");
     var metadata = new Date().toTimeString().slice(0, 5);
     if (role == 'assistant') {
-      metadata += `         ${usage.total_tokens} tokens, ${numImages} images, message cost: \$${cost}`;
+      metadata += `  ${usage.total_tokens} tokens, ${numImages} images, message cost: \$${cost}`;
     }
     metadataElement.textContent = metadata;
     container.appendChild(metadataElement);
