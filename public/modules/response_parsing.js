@@ -55,4 +55,10 @@ function parseResponse(responseText) {
     };
 }
 
-export { parseResponse }
+function numImages(responseText) {
+    const lines = responseText.split('\n');
+    const images = lines.filter((l) => {return l.startsWith('```image')});
+    return images.length
+}
+
+export { parseResponse, numImages }

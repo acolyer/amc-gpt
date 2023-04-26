@@ -1,4 +1,4 @@
-import { parseResponse } from "../public/modules/response_parsing.js";
+import { numImages, parseResponse } from "../public/modules/response_parsing.js";
 
 const modelResponse = `\
 # Thoughts
@@ -25,6 +25,17 @@ This is the beginning of the reply.
 
 # Follow-up questions
 * Why was there no answer section?
+`;
+
+const imagesResponse = `\
+Some text
+\`\`\`image
+description
+\`\`\`
+Some more text
+\`\`\`image
+Another description
+\`\`\`
 `;
 
 describe('parseResponse', () => {
@@ -68,3 +79,12 @@ describe('parseResponse', () => {
          });
     });
 });
+
+describe('numImages', () => {
+    it('returns 0 when there are no images', () => {
+        expect(numImages('No images')).toBe(0);
+    });
+    it('counts the number of markdown image sections', () => {
+        expect(numImages(imagesResponse)).toBe(2);
+    });
+})
