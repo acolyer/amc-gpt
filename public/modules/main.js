@@ -4,7 +4,7 @@ import { getApiKey, getUserInput, showChatMessage, onSendMessage, showSystemMess
          clearSystemMessages, showThoughts, showAssumptions, showReflection, showFollowUps,
          showSpinner, hideSpinner, clearGPTOutputs} from "./bindings.js";
 import { getChatCompletion } from "./openai.js";
-import { parseResponse } from "./response_parsing.js";
+import { numImages, parseResponse } from "./response_parsing.js";
 import { addResponseCost } from "./costings.js";
 
 console.log('amc-gpt starting');
@@ -33,6 +33,7 @@ onSendMessage(async (event) => {
    const apiKey = getApiKey();
    if (apiKey == undefined || apiKey.length == 0) {
         showSystemMessage("API key is required");
+        hideSpinner();
         return;
    } 
    const response = await getChatCompletion(getApiKey(), getChatMessages());
@@ -40,9 +41,10 @@ onSendMessage(async (event) => {
    console.log(responseData);
 
    const usage = responseData.usage;
-   const cost = addResponseCost(usage);
    const responseText = responseData.choices[0].message.content;
    console.log(responseText);
+   const images = numImages(responseText);
+   const cost = addResponseCost(usage, images);
    logAssistantMessage(responseText);
 
    const parsedReply = parseResponse(responseText);
