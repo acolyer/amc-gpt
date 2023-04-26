@@ -6,17 +6,12 @@ import { getApiKey, getUserInput, showChatMessage, onSendMessage, showSystemMess
 import { getChatCompletion } from "./openai.js";
 import { numImages, parseResponse } from "./response_parsing.js";
 import { addResponseCost } from "./costings.js";
+import { initImagesExtension } from './showdown_images.js';
 
 console.log('amc-gpt starting');
 showdowns.init();
-logSystemMessage(getSystemPrompt());
-
-const sampleMessage=`\
-Emma Woodhouse, handsome, clever, and rich, with a comfortable home and happy disposition, seemed to unite some of the best blessings of existence; and had lived nearly twenty-one years in the world with very little to distress or vex her.
-She was the youngest of the two daughters of a most affectionate, indulgent father; and had, in consequence of her sister’s marriage, been mistress of his house from a very early period. Her mother had died too long ago for her to have more than an indistinct remembrance of her caresses; and her place had been supplied by an excellent woman as governess, who had fallen little short of a mother in affection.
-`;
-showChatMessage('user',sampleMessage);
-showChatMessage('assistant','A response from ChatGPT', {total_tokens: 1000}, 0, 0.03);
+initImagesExtension();
+logSystemMessage(getSystemPrompt()); 
 
 onSendMessage(async (event) => {
    event.preventDefault();
