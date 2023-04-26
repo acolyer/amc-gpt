@@ -40,4 +40,14 @@ describe('parseResponse', () => {
            followUps: '* You should ask this\n* And that\n'
         });
     });
+
+    it('uses the full text of the response as the answer when there is no answer section', () => {
+        expect(parseResponse('This is just plain text')).toEqual({
+            thoughts: '',
+            answer: 'This is just plain text',
+            assumptions: '',
+            reflection: '',
+            followUps: ''
+        });
+    });
 });

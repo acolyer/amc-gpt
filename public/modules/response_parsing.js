@@ -1,5 +1,3 @@
-import { response } from "express";
-
 function isSectionHeader(line) {
     return line.startsWith('# Thoughts') ||
            line.startsWith('# Answer') ||
@@ -30,7 +28,10 @@ function extractSection(section, response) {
 
 function parseResponse(responseText) {
     const thoughts = extractSection("# Thoughts", responseText);
-    const answer = extractSection('# Answer', responseText);
+    var answer = extractSection('# Answer', responseText);
+    if (answer == '') {
+        answer = responseText;
+    }
     const assumptions = extractSection('# Assumptions', responseText);
     const reflections = extractSection('# Reflection', responseText);
     const followUps = extractSection('# Follow-up questions', responseText);
