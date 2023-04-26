@@ -5,6 +5,7 @@ const OPENAI_CHAT_COMPLETION_ENDPOINT = 'https://api.openai.com/v1/chat/completi
 const OPENAI_IMAGE_GENERATION_ENDPOINT = 'https://api.openai.com/v1/images/generations';
 
 async function getChatCompletion(apiKey, messages, model=DEFAULT_COMPLETION_MODEL) {
+    console.log(messages);
     return await fetch(OPENAI_CHAT_COMPLETION_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -14,7 +15,8 @@ async function getChatCompletion(apiKey, messages, model=DEFAULT_COMPLETION_MODE
         body: JSON.stringify({
             'model': model,
             'messages': messages
-        })
+        }),
+        redirect: 'follow'
     });
 }
 
@@ -28,7 +30,8 @@ async function getImage(apiKey, imageSpec) {
         body: JSON.stringify({
             'prompt': imageSpec,
             'size': '512x512'
-        })
+        }),
+        redirect: 'follow'
     });
 }
 
