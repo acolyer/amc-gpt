@@ -45,7 +45,8 @@ math elements with $$ for display mode, and with a single $ for inline mode.`;
 
 const graphs = `\
 To include a graph or mindmap, you should provide the code using graphviz dot syntax. Dot graphs
-should be delineated in the markdown using code blocks with style dot.
+should be delineated in the markdown using code blocks with style dot. Always make sure that there
+is only one root element in the graph.
 
 For example:
 
@@ -63,7 +64,8 @@ const images = `\
 Although you cannot create images yourself, whenever you think that one of your replies 
 could be enhanced or illustrated with a suitable image you should include a description
 of the image to be included. Each image description should be provided in a markdown block
-of type image. For example:
+of type image. Do not provide links to online images, always use this description format 
+instead. For example:
 
 \`\`\`image
 An orchard with fruit trees in blossom and daffodils growing beneath them.
@@ -72,7 +74,7 @@ An orchard with fruit trees in blossom and daffodils growing beneath them.
 
 const chainOfThought = `\
 Before giving your final answer, please show your thinking and
-step by step plan for creating the answer. These thoughts should include an assessment
+step by step plan for creating the answer. Include an assessment
 of what charts, graphs, tables and images might enhance the final reply.
 `;
 
