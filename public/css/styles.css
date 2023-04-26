@@ -2,6 +2,27 @@ h1 {
     text-align: center;
 }
 
+#container {
+    display: flex;
+    flex-direction: row;
+}
+
+@media screen and (max-width: 1200px) {
+    #container {
+        flex-direction: column;
+    }
+}
+
+#primaryContent {
+    flex: 0 0 60%;
+    min-width: 720px;
+    padding: 20px;
+}
+
+aside {
+    margin-left: 20px;
+}
+
 #chat {
     display: flex;
     flex-direction: column;
@@ -14,7 +35,6 @@ h1 {
     margin: 0 auto;
     padding: 0px;
     border-radius: 5px;
-    width: 720px;
 }
 
 .chatMessage {
@@ -23,15 +43,15 @@ h1 {
     border: 2px solid #dedede;
     margin: 10px 0;
     padding: 20px;
-    width: 700px;
+    width: 85%;
 }
 
 .chatMessage.user {
-    float: right;
+    float: left;
 }
 
 .chatMessage.assistant {
-    float: left;
+    float: right;
     border-color: #ccc;
     background-color: #ffffff;
 }
@@ -65,7 +85,7 @@ h1 {
 
 #sendMessage {
     padding-top: 20px;
-    padding-left: 30px;
+    padding-left: 30px; 
 }
 
 #sendMessageButton {
@@ -76,7 +96,7 @@ h1 {
 }
 
 #userMessage {
-    max-width: 720px;
+    max-width: 680px;
     width: 100%;
     height: 50px;
     line-height: 1.5;
