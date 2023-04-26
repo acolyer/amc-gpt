@@ -3,7 +3,7 @@ function addMarkdownContentToElement(element, markdown) {
     showdowns.makeHtml(markdown).then(html => {
         markdownDiv.innerHTML = html;
     }).catch(error => {
-        console.log(`Showdowns rendering error: {error}`);
+        console.log(`Showdowns rendering error: ${error}`);
         markdownDiv.innerHTML = error;
     });
     element.appendChild(markdownDiv);
@@ -62,6 +62,30 @@ function showChatMessage(role, message, usage, numImages, cost) {
     addMarkdownContentToElement(chatMessageContainer, message);
     addMessageMetadata(chatMessageContainer, role, usage, numImages, cost);
     document.getElementById('chatHistory').appendChild(chatMessageContainer);
+    if (role == 'user') {
+        document.getElementById('userMessage').value = '';
+    }
 }
 
-export { showThoughts, showReflection, showAssumptions, showFollowUps, showChatMessage }
+function showSystemMessage(message) {
+    document.getElementById('systemMessages').innerHTML = `<p>${message}</p>`
+}
+
+function clearSystemMessages() {
+    document.getElementById('systemMessages').innerHTML = '';
+}
+
+function getUserInput() {
+    return document.getElementById('userMessage').value;
+}
+
+function getApiKey() {
+    return document.getElementById('openAIAPIKey').value;
+}
+
+function onSendMessage(handler) {
+    document.getElementById('sendMessageButton').addEventListener('click', handler);
+}
+
+export { showThoughts, showReflection, showAssumptions, showFollowUps, showChatMessage,
+         onSendMessage, getUserInput, getApiKey, showSystemMessage, clearSystemMessages }
