@@ -20,6 +20,13 @@ What a jolly fine answer that was
 * And that
 `;
 
+const missingAnswerResponse = `\
+This is the beginning of the reply.
+
+# Follow-up questions
+* Why was there no answer section?
+`;
+
 describe('parseResponse', () => {
     it('returns empty sections given an empty message', () => {
         expect(parseResponse('')).toEqual({
@@ -41,7 +48,7 @@ describe('parseResponse', () => {
         });
     });
 
-    it('uses the full text of the response as the answer when there is no answer section', () => {
+    it('uses the full text of the response as the answer when there are no sections', () => {
         expect(parseResponse('This is just plain text')).toEqual({
             thoughts: '',
             answer: 'This is just plain text',
@@ -49,5 +56,15 @@ describe('parseResponse', () => {
             reflection: '',
             followUps: ''
         });
+    });
+
+    it('uses the text up to first recognised section as the answer when there is no answer section', () => {
+        expect(parseResponse(missingAnswerResponse)).toEqual({
+            thoughts: '',
+            answer: 'This is the beginning of the reply.\n',
+            assumptions: '',
+            reflection: '',
+            followUps: '* Why was there no answer section?\n'
+         });
     });
 });

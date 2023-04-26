@@ -26,11 +26,22 @@ function extractSection(section, response) {
     return sectionBody.join('\n');
 }
 
+function contentUpToFirstSectionHeader(response) {
+    const lines = response.split('\n');
+    const sectionStart = lines.findIndex(isSectionHeader);
+    if (sectionStart == -1) {
+        return response;
+    } 
+
+    const sectionBody = lines.slice(0, sectionStart);
+    return sectionBody.join('\n');    
+}
+
 function parseResponse(responseText) {
     const thoughts = extractSection("# Thoughts", responseText);
     var answer = extractSection('# Answer', responseText);
     if (answer == '') {
-        answer = responseText;
+        answer = contentUpToFirstSectionHeader(responseText);
     }
     const assumptions = extractSection('# Assumptions', responseText);
     const reflections = extractSection('# Reflection', responseText);
