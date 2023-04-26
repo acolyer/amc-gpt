@@ -1,3 +1,12 @@
+import { llmActivity } from './thinking.js';
+
+function updateLLMActivity() {
+    const thinkingSpan = document.getElementById('llm-activity');
+    thinkingSpan.innerText = llmActivity();
+}
+
+setInterval(updateLLMActivity, 3000);
+
 function addMarkdownContentToElement(element, markdown) {
     const markdownDiv = document.createElement('div');
     showdowns.makeHtml(markdown).then(html => {
@@ -15,19 +24,19 @@ function addMarkdownContenttoSection(elementId, markdown) {
 }
 
 function showThoughts(thoughts) {
-    addMarkdownContenttoSection('thoughts', thoughts);
+    addMarkdownContenttoSection('thoughtsContainer', thoughts);
 }
 
 function showReflection(reflection) { 
-    addMarkdownContenttoSection('reflection', reflection);
+    addMarkdownContenttoSection('reflectionsContainer', reflection);
 }
 
 function showAssumptions(assumptions) {
-    addMarkdownContenttoSection('assumptions', assumptions);
+    addMarkdownContenttoSection('assumptionsContainer', assumptions);
 }
 
 function showFollowUps(followUps) { 
-    addMarkdownContenttoSection('follow-ups', followUps);
+    addMarkdownContenttoSection('followUpsContainer', followUps);
 }
 
 function createChatMessageContainer(role) {
@@ -65,10 +74,18 @@ function showChatMessage(role, message, usage, numImages, cost) {
     if (role == 'user') {
         document.getElementById('userMessage').value = '';
     }
+    chatMessageContainer.scrollIntoView(true);
 }
 
 function showSystemMessage(message) {
     document.getElementById('systemMessages').innerHTML = `<p>${message}</p>`
+}
+
+function clearGPTOutputs() {
+    document.getElementById('thoughtsContainer').innerHTML = '';
+    document.getElementById('assumptionsContainer').innerHTML = '';
+    document.getElementById('reflectionsContainer').innerHTML = '';
+    document.getElementById('followUpsContainer').innerHTML = '';
 }
 
 function clearSystemMessages() {
@@ -87,5 +104,25 @@ function onSendMessage(handler) {
     document.getElementById('sendMessageButton').addEventListener('click', handler);
 }
 
+function showSpinner() {
+    document.getElementById('thinking').style.display = 'flex';
+}
+
+function hideSpinner() { 
+    document.getElementById('thinking').style.display = 'none';
+}
+
+const apiKeyInput = document.getElementById('openAIAPIKey');
+apiKeyInput.classList.add('required-missing');
+apiKeyInput.addEventListener('change', () => {
+   if (apiKeyInput.value == '') { 
+    apiKeyInput.classList.add('required-missing');
+   } else {
+    apiKeyInput.classList.remove('required-missing');
+   }
+});
+
+
 export { showThoughts, showReflection, showAssumptions, showFollowUps, showChatMessage,
-         onSendMessage, getUserInput, getApiKey, showSystemMessage, clearSystemMessages }
+         onSendMessage, getUserInput, getApiKey, showSystemMessage, clearSystemMessages,
+        showSpinner, hideSpinner, clearGPTOutputs }

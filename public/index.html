@@ -24,7 +24,12 @@
               <!-- will contain a series of articles, one for each chat message -->
             </section>
 
-            <span id="thinking" class="loader"></span>
+            <div id="thinking">
+             <span id="spinner" class="loader"></span>
+             <p>Waiting for a reply. Current ChatGPT status:
+             <span id="llm-activity"></span>
+             </p>
+            </div>
 
             <section id="sendMessage">
                 <form id="sendMessageForm">
@@ -52,27 +57,31 @@
           <h2>Settings</h2>
           <form>
             <label for="openAIAPIKey">OpenAI API Key:</label>
-            <input type="password" id="openAIAPIKey" required>
+            <input type="password" id="openAIAPIKey" placeholder="sk-... (required)" required>
           </form>
         </section>
 
         <section id="thoughts">
           <!-- thoughts extracted from ChatGPT's responses -->
           <h2>Thoughts</h2>
+          <div id="thoughtsContainer"</div>
         </section>
 
         <section id="assumptions">
           <h2>Assumptions</h2>
+          <div id="assumptionsContainer"></div>
         </section>
 
         <section id="reflection">
           <!-- self-reflection commentary extracted from ChatGPT's responses -->
           <h2>Critique</h2>
+          <div id="reflectionsContainer"></div>
         </section>
 
         <section id="follow-ups">
           <!-- Recommended follow-ups extracted from ChatGPT's reponses -->
           <h2>Follow-up questions</h2>
+          <div id="followUpsContainer"></div>
         </section>
       </aside>
     </div>
