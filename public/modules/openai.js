@@ -13,8 +13,9 @@ async function getChatCompletion(apiKey, messages, model=DEFAULT_COMPLETION_MODE
             'Authorization': 'Bearer ' + apiKey
         },
         body: JSON.stringify({
-            'model': model,
-            'messages': messages
+            model: model,
+            messages: messages,
+            stream: true
         }),
         redirect: 'follow'
     });
@@ -35,4 +36,29 @@ async function getImage(apiKey, imageSpec) {
     });
 }
 
-export { getChatCompletion, getImage }
+async function getStreamedContent(response, contentHandler) {
+    const data = await response;
+    const reader = data.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) { break; }
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+        lines.forEach(line => {
+            const lineData = line.slice(6);  // 'data: '  
+            if (lineData.length > 0 && !lineData.startsWith('[DONE]')) {
+                const json = JSON.parse(lineData);
+                const firstChoice = json.choices[0];
+                if (firstChoice.delta.content) {
+                    contentHandler(firstChoice.delta.content);
+                }
+            }
+        });
+    }
+    contentHandler('[DONE]');
+    return '';
+}
+
+export { getChatCompletion, getImage, getStreamedContent }
