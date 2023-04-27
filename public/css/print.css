@@ -5,4 +5,8 @@
     aside {
         display: none;
     }
+    #chat {
+        max-height: unset;
+        overflow-y: unset;
+    }
 }
