@@ -29,6 +29,15 @@ aside {
     color: gray;
 }
 
+#followUpsContainer li {
+    text-decoration: underline;
+    color: rgb(8, 103, 130);
+}
+
+#followUpsContainer li:hover {
+    color: blue;
+}
+
 #chat {
     display: flex;
     flex-direction: column;

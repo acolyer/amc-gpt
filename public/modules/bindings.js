@@ -35,8 +35,18 @@ function showAssumptions(assumptions) {
     addMarkdownContenttoSection('assumptionsContainer', assumptions);
 }
 
+function askQuestion(question) {
+    document.getElementById('userMessage').value = question;
+}
+
 function showFollowUps(followUps) { 
     addMarkdownContenttoSection('followUpsContainer', followUps);
+    const questions = document.querySelectorAll('#followUpsContainer li');
+    questions.forEach(question => {
+        question.addEventListenen('click', event => {
+            askQuestion(question.innerText);
+        });
+    });
 }
 
 function createChatMessageContainer(role) {
