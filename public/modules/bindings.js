@@ -88,9 +88,6 @@ function addMessageMetadata(container, role, usage, numImages, cost) {
     const metadataElement = document.createElement("span");
     metadataElement.classList.add("metadata");
     var metadata = new Date().toTimeString().slice(0, 5);
-    // if (role == 'assistant') {
-    //   metadata += `  ${usage.total_tokens} tokens, ${numImages} images, message cost: \$${cost}`;
-    // }
     metadataElement.textContent = metadata;
     container.appendChild(metadataElement);
 }
@@ -151,6 +148,12 @@ function addStreamingContent(content) {
     document.getElementById('streamingResponseContent').innerText = content;
 }
 
+function showResponseMetadata(usage, numImages, cost) {
+    const metadata = `  ${usage.total_tokens} tokens, ${numImages} images, message cost: \$${cost}`;
+    const targetElement = document.querySelector('.metadata:last-of-type');
+    targetElement.textContent = targetElement.textContent + metadata;
+}
+
 const apiKeyInput = document.getElementById('openAIAPIKey');
 apiKeyInput.classList.add('required-missing');
 apiKeyInput.addEventListener('change', () => {
@@ -164,4 +167,5 @@ apiKeyInput.addEventListener('change', () => {
 
 export { showThoughts, showReflection, showAssumptions, showFollowUps, showChatMessage,
          onSendMessage, getUserInput, getApiKey, showSystemMessage, clearSystemMessages,
-         showWaiting, hideThinking, hideStreamingResponse, clearGPTOutputs, addStreamingContent }
+         showWaiting, hideThinking, hideStreamingResponse, clearGPTOutputs, addStreamingContent,
+        showResponseMetadata }

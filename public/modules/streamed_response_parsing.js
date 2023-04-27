@@ -1,8 +1,9 @@
 import { addStreamingContent, hideThinking, hideStreamingResponse,
-         showChatMessage, showThoughts, showAssumptions, showReflection, showFollowUps } from "./bindings.js";
+         showChatMessage, showThoughts, showAssumptions, showReflection, showFollowUps,
+         showResponseMetadata } from "./bindings.js";
 import { logAssistantMessage } from "./chat_log.js";
 import { addResponseCost } from "./costings.js";
-import { parseResponse } from "./response_parsing.js";
+
 
 const sectionHeaders = [
     { header: '# Thoughts', fn: thoughts },
@@ -94,16 +95,12 @@ function calculateUsage() {
 function contentComplete() {
     followups();
     logAssistantMessage(streamedContent);
-    const images = numImages();
-    const usage = calculateUsage()
-    const cost = addResponseCost(usage, images);
     hideStreamingResponse();
     console.log(streamedContent);
 
     if (answer == '') {
         showChatMessage('assistant', streamedContent);
     }
-    // TODO: showResponseMetadata(usage, images, cost);
 }
 
 function checkForNextSectionHeader() { 
