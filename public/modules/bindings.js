@@ -7,10 +7,24 @@ function updateLLMActivity() {
 
 setInterval(updateLLMActivity, 3000);
 
+function blinkCursor() {
+    const cursorElement = document.getElementById('streamingResponseCursor');
+    if (cursorElement.innerText == '') {
+        cursorElement.innerText = '...';
+    } else {
+        cursorElement.innerText = '';
+    }
+}
+
+setInterval(blinkCursor, 600);
+
 function addMarkdownContentToElement(element, markdown) {
     const markdownDiv = document.createElement('div');
     showdowns.makeHtml(markdown).then(html => {
         markdownDiv.innerHTML = html;
+        if (element.id == 'followUpsContainer') {
+            registerQuestionHandlers();
+        }
     }).catch(error => {
         console.log(`Showdowns rendering error: ${error}`);
         markdownDiv.innerHTML = error;
@@ -35,18 +49,21 @@ function showAssumptions(assumptions) {
     addMarkdownContenttoSection('assumptionsContainer', assumptions);
 }
 
+function registerQuestionHandlers() {
+    const questions = document.querySelectorAll('#followUpsContainer li');
+    questions.forEach(question => {
+        question.addEventListener('click', event => {
+            askQuestion(question.innerText);
+        });
+    });
+}
+
 function askQuestion(question) {
     document.getElementById('userMessage').value = question;
 }
 
 function showFollowUps(followUps) { 
     addMarkdownContenttoSection('followUpsContainer', followUps);
-    const questions = document.querySelectorAll('#followUpsContainer li');
-    questions.forEach(question => {
-        question.addEventListenen('click', event => {
-            askQuestion(question.innerText);
-        });
-    });
 }
 
 function createChatMessageContainer(role) {
@@ -114,12 +131,21 @@ function onSendMessage(handler) {
     document.getElementById('sendMessageButton').addEventListener('click', handler);
 }
 
-function showSpinner() {
+function showWaiting() {
     document.getElementById('thinking').style.display = 'flex';
+    document.getElementById('streamingResponse').style.display = 'flex';
 }
 
-function hideSpinner() { 
+function hideThinking() { 
     document.getElementById('thinking').style.display = 'none';
+}
+
+function hideStreamingResponse() { 
+    document.getElementById('streamingResponse').style.display = 'none';
+}
+
+function addStreamingContent(content) { 
+    document.getElementById('streamingResponseContent').innerText = content;
 }
 
 const apiKeyInput = document.getElementById('openAIAPIKey');
@@ -135,4 +161,4 @@ apiKeyInput.addEventListener('change', () => {
 
 export { showThoughts, showReflection, showAssumptions, showFollowUps, showChatMessage,
          onSendMessage, getUserInput, getApiKey, showSystemMessage, clearSystemMessages,
-        showSpinner, hideSpinner, clearGPTOutputs }
+         showWaiting, hideThinking, hideStreamingResponse, clearGPTOutputs, addStreamingContent }
