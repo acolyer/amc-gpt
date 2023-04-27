@@ -10,6 +10,7 @@ playground interfaces it provides for:
   were made in producing the answer. ChatGPT is also asked to critique the answer which highlights useful things to be aware of in some circumstances.
 * Suggestions for follow-up questions you might like to ask, clicking on any of these copies it into
   the message box ready for you to send to ChatGPT
+* You can use newlines in your message just with the enter key, and then Cmd-Enter will send it (or you can click on the button if you prefer)
 * A print stylesheet so that you can easily print your full chat history!
 
 ## Installation

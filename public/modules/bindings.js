@@ -129,6 +129,12 @@ function getApiKey() {
 
 function onSendMessage(handler) {
     document.getElementById('sendMessageButton').addEventListener('click', handler);
+    document.getElementById('userMessage').addEventListener("keydown", event => {
+        if ((event.metaKey || event.ctrlKey) && event.keyCode === 13) {
+            event.preventDefault();
+            handler();
+        }
+    });
 }
 
 function showWaiting() {
