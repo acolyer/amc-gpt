@@ -4,12 +4,74 @@ import { logAssistantMessage } from "./chat_log.js";
 import { addResponseCost } from "./costings.js";
 import { parseResponse } from "./response_parsing.js";
 
+const sectionHeaders = [
+    { header: '# Thoughts', fn: thoughts },
+    { header: '# Answer', fn: answer },
+    { header: '# Assumptions', fn: assumptions },
+    { header: '# Reflection', fn: reflections },
+    { header: '# Follow-up questions', fn: followups }
+];
+var nextHeaderIndex = 0;
 var streamedContent = '';
-var currentSection = 'answer';
+var answer = '';
 
 function resetContent() {
     streamedContent = '';
-    currentSection = 'answer';
+    nextHeaderIndex = 0;
+    answer = '';
+}
+
+function isSectionHeader(line) {
+    return line.startsWith('# Thoughts') ||
+           line.startsWith('# Answer') ||
+           line.startsWith('# Assumptions') ||
+           line.startsWith('# Reflection') || 
+           line.startsWith('# Follow-up questions')
+}
+
+function extractSection(section) {
+    var sectionBody = '';
+    const lines = streamedContent.split('\n');
+
+    const sectionStart = lines.findIndex((l) => {
+        return l.startsWith(section);
+    });
+
+    if (sectionStart == -1) {
+        return '';
+    } else {
+       sectionBody = lines.slice(sectionStart + 1);
+       const sectionEnd = sectionBody.findIndex(isSectionHeader);
+       if (sectionEnd != -1) { 
+        sectionBody = sectionBody.slice(0, sectionEnd);
+       }
+    }
+    return sectionBody.join('\n');
+}
+
+function thoughts() {
+    const thoughts = extractSection('# Thoughts');
+    showThoughts(thoughts);
+}
+
+function answer() {
+    answer = extractSection('# Answer');
+    showChatMessage('assistant', answer );
+}
+
+function assumptions() {
+    const assumptions = extractSection('# Assumptions');
+    showAssumptions(assumptions);
+}
+
+function reflections() {
+    const reflections = extractSection('# Reflection');
+    showReflection(reflections);
+}
+
+function followups() {
+    const followups = extractSection('# Follow-up questions');
+    showFollowUps(followups);
 }
 
 function last80Chars() {
@@ -30,6 +92,7 @@ function calculateUsage() {
 }
 
 function contentComplete() {
+    followups();
     logAssistantMessage(streamedContent);
     const images = numImages();
     const usage = calculateUsage()
@@ -37,12 +100,21 @@ function contentComplete() {
     hideStreamingResponse();
     console.log(streamedContent);
 
-    const parsedReply = parseResponse(streamedContent);
-    showChatMessage('assistant', parsedReply.answer, usage, images, cost);
-    showThoughts(parsedReply.thoughts);
-    showAssumptions(parsedReply.assumptions);
-    showReflection(parsedReply.reflection);
-    showFollowUps(parsedReply.followUps);
+    if (answer == '') {
+        showChatMessage('assistant', streamedContent);
+    }
+    // TODO: showResponseMetadata(usage, images, cost);
+}
+
+function checkForNextSectionHeader() { 
+    if (nextHeaderIndex >= sectionHeaders.length) { return; }
+
+    if (streamedContent.indexOf(sectionHeaders[nextHeaderIndex].header) != -1) {
+        if (nextHeaderIndex > 0) {
+            sectionHeaders[nextHeaderIndex - 1].fn(); // previous section completed
+        }
+        nextHeaderIndex++;
+    }
 }
 
 function newContent(content) {
@@ -51,7 +123,8 @@ function newContent(content) {
         contentComplete();
     } else {
         streamedContent += content;
-        addStreamingContent(last80Chars(content).replace(/\n/g,' ')); 
+        addStreamingContent(last80Chars(content).replace(/\n/g,' '));
+        checkForNextSectionHeader()
     }
 }
 

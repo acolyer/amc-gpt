@@ -19,6 +19,7 @@ function blinkCursor() {
 setInterval(blinkCursor, 600);
 
 function addMarkdownContentToElement(element, markdown) {
+    if (markdown.length == 0) { return; }
     const markdownDiv = document.createElement('div');
     showdowns.makeHtml(markdown).then(html => {
         markdownDiv.innerHTML = html;
@@ -30,6 +31,7 @@ function addMarkdownContentToElement(element, markdown) {
         markdownDiv.innerHTML = error;
     });
     element.appendChild(markdownDiv);
+    Prism.highlightAll();
 }
 
 function addMarkdownContenttoSection(elementId, markdown) {
@@ -86,9 +88,9 @@ function addMessageMetadata(container, role, usage, numImages, cost) {
     const metadataElement = document.createElement("span");
     metadataElement.classList.add("metadata");
     var metadata = new Date().toTimeString().slice(0, 5);
-    if (role == 'assistant') {
-      metadata += `  ${usage.total_tokens} tokens, ${numImages} images, message cost: \$${cost}`;
-    }
+    // if (role == 'assistant') {
+    //   metadata += `  ${usage.total_tokens} tokens, ${numImages} images, message cost: \$${cost}`;
+    // }
     metadataElement.textContent = metadata;
     container.appendChild(metadataElement);
 }
@@ -113,6 +115,7 @@ function clearGPTOutputs() {
     document.getElementById('assumptionsContainer').innerHTML = '';
     document.getElementById('reflectionsContainer').innerHTML = '';
     document.getElementById('followUpsContainer').innerHTML = '';
+    document.getElementById('streamingResponseContent').innerText = '';
 }
 
 function clearSystemMessages() {
