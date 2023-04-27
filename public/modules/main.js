@@ -35,5 +35,10 @@ onSendMessage(async (event) => {
         return;
    } 
    const response = getChatCompletion(getApiKey(), getChatMessages());
-   getStreamedContent(response, content => { newContent(content); });
+   const data = await response;
+   if (data.status == 200) {
+    getStreamedContent(data, content => { newContent(content); });
+   } else {
+      showSystemMessage(`Error returned from OpenAI API, status code: ${data.status}`);
+   }
 });

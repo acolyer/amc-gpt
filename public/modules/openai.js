@@ -36,8 +36,7 @@ async function getImage(apiKey, imageSpec) {
     });
 }
 
-async function getStreamedContent(response, contentHandler) {
-    const data = await response;
+async function getStreamedContent(data, contentHandler) {
     const reader = data.body.getReader();
     const decoder = new TextDecoder('utf-8');
     while (true) {
