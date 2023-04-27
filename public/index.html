@@ -29,11 +29,16 @@
             </section>
 
             <div id="thinking">
-             <span id="spinner" class="loader"></span>
-             <p>Waiting for a reply. Current ChatGPT status:
-             <span id="llm-activity"></span>
-             </p>
-            </div>
+                <p>Waiting for a reply. Current ChatGPT status:
+                <span id="llm-activity"></span>
+                </p>
+             </div>
+             <div id="streamingResponse">
+                <p>
+                 <span id="streamingResponseContent"></span>
+                 <span id="streamingResponseCursor"></span>
+                </p>
+             </div>
 
             <section id="sendMessage">
                 <form id="sendMessageForm">
