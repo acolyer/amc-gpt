@@ -202,3 +202,9 @@ input {
 input.required-missing {
     background-color: #efbcc3;
 }
+
+img.openai {
+    width: 512px;
+    height: 512px;
+    border: 1px solid silver;
+}
