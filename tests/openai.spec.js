@@ -33,7 +33,8 @@ describe('getChatCompletion', () => {
         const callParameters = apiCall[1];
         const expectedBody = JSON.stringify({
             model: 'gpt-3.5-turbo',
-            messages: [{ role: 'user', content: 'A message' }]
+            messages: [{ role: 'user', content: 'A message' }],
+            stream: true
         });
         expect(callParameters.body).toEqual(expectedBody);
     });
