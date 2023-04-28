@@ -1,11 +1,24 @@
 import { llmActivity } from './thinking.js';
 
+function initBindings() {
+    setInterval(updateLLMActivity, 3000);
+    setInterval(blinkCursor, 600);
+ 
+    const apiKeyInput = document.getElementById('openAIAPIKey');
+    apiKeyInput.classList.add('required-missing');
+    apiKeyInput.addEventListener('change', () => {
+    if (apiKeyInput.value == '') { 
+        apiKeyInput.classList.add('required-missing');
+    } else {
+        apiKeyInput.classList.remove('required-missing');
+    }
+    });
+}
+
 function updateLLMActivity() {
     const thinkingSpan = document.getElementById('llm-activity');
     thinkingSpan.innerText = llmActivity();
 }
-
-setInterval(updateLLMActivity, 3000);
 
 function blinkCursor() {
     const cursorElement = document.getElementById('streamingResponseCursor');
@@ -15,8 +28,6 @@ function blinkCursor() {
         cursorElement.innerText = '';
     }
 }
-
-setInterval(blinkCursor, 600);
 
 function addMarkdownContentToElement(element, markdown) {
     if (markdown.length == 0) { return; }
@@ -160,18 +171,10 @@ function showResponseMetadata(usage, numImages, cost) {
     targetElement.textContent = targetElement.textContent + metadata;
 }
 
-const apiKeyInput = document.getElementById('openAIAPIKey');
-apiKeyInput.classList.add('required-missing');
-apiKeyInput.addEventListener('change', () => {
-   if (apiKeyInput.value == '') { 
-    apiKeyInput.classList.add('required-missing');
-   } else {
-    apiKeyInput.classList.remove('required-missing');
-   }
-});
 
 
-export { showThoughts, showReflection, showAssumptions, showFollowUps, showChatMessage,
+
+export { initBindings, showThoughts, showReflection, showAssumptions, showFollowUps, showChatMessage,
          onSendMessage, getUserInput, getApiKey, showSystemMessage, clearSystemMessages,
          showWaiting, hideThinking, hideStreamingResponse, clearGPTOutputs, addStreamingContent,
         showResponseMetadata }

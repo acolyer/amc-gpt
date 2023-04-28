@@ -1,7 +1,7 @@
 import { getChatMessages, logAssistantMessage, logSystemMessage, logUserMessage } from "./chat_log.js";
 import { getSystemPrompt, getUserPrompt } from "./prompt_engineering.js"
-import { getApiKey, getUserInput, showChatMessage, onSendMessage, showSystemMessage, 
-         clearSystemMessages, showThoughts, showAssumptions, showReflection, showFollowUps,
+import { initBindings, getApiKey, getUserInput, showChatMessage, onSendMessage, showSystemMessage, 
+         clearSystemMessages,
          clearGPTOutputs, showWaiting, hideThinking, hideStreamingResponse } from "./bindings.js";
 import { getChatCompletion, getStreamedContent } from "./openai.js";
 import { numImages, parseResponse } from "./response_parsing.js";
@@ -12,6 +12,7 @@ import { resetContent, newContent } from "./streamed_response_parsing.js";
 console.log('amc-gpt starting');
 showdowns.init();
 initImagesExtension();
+initBindings();
 logSystemMessage(getSystemPrompt()); 
 
 onSendMessage(async (event) => {
