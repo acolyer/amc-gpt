@@ -4,10 +4,8 @@ import { getApiKey } from "./bindings.js";
 var imageNum = 0;
 
 function setImageUrl(imgId, description) {
-    console.log('Requesting image');
     getImage(getApiKey(), description).then(response => {
         response.json().then(json => {
-           console.log(json);
            document.getElementById(imgId).src = json.data[0].url;
         });
     });
@@ -18,8 +16,9 @@ function renderImageElement(element) {
     img.classList.add('openai');
     const id = `openai-image-${++imageNum}`;
     img.id = id;
-    element.parentElement.replaceWith(img);
     const imageDescription = element.innerText;
+    img.alt = imageDescription;
+    element.parentElement.replaceWith(img);
     const imgURL = setImageUrl(id, imageDescription);
 }
 
