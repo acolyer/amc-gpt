@@ -65,10 +65,22 @@ function getSectionConfig() {
 
 var sectionConfig = null;
 var sectionParser = null;
+var startCalled = false;
+var endCalled = false;
+
+function startHandler() {
+    startCalled = true;
+}
+
+function endHandler() {
+    endCalled = true;
+}
 
 beforeEach(() => { 
     sectionConfig = getSectionConfig();
-    sectionParser = new SectionParser(sectionConfig);
+    sectionParser = new SectionParser(sectionConfig, startHandler, endHandler);
+    startCalled = false;
+    endCalled = false;
 });
 
 function processorFor(name) {
@@ -79,14 +91,14 @@ describe('SectionParser', () => {
     it('collects the raw content passed to it', () => {
         sectionParser.processChunk('Hello ');
         sectionParser.processChunk('World!');
-        sectionParser.finish();
+        sectionParser.processChunk('[DONE]');
         expect(sectionParser.getRawContent()).toEqual('Hello World!');
     });
 
     it('sends all text to the default section in the absence of any headings', () => {
         sectionParser.processChunk('Hello ');
         sectionParser.processChunk('World!');
-        sectionParser.finish();
+        sectionParser.processChunk('[DONE]');
         expect(processorFor('answer').getContent()).toEqual('Hello World!');
         expect(processorFor('answer').getCompleted()).toBe(true);
     });
@@ -94,7 +106,7 @@ describe('SectionParser', () => {
     it('sends preamble before the first heading to the default section', () => {
         sectionParser.processChunk('Hello World!\n');
         sectionParser.processChunk('# Thoughts');
-        sectionParser.finish();
+        sectionParser.processChunk('[DONE]');
         const answerProcessor = processorFor('answer');
         expect(answerProcessor.getContent()).toEqual('Hello World!\n');
         expect(answerProcessor.getCompleted()).toBe(true);
@@ -106,7 +118,7 @@ describe('SectionParser', () => {
         sectionParser.processChunk('Some thoughts...\n');
         sectionParser.processChunk('# Answer\n');
         sectionParser.processChunk('More answer.');
-        sectionParser.finish();
+        sectionParser.processChunk('[DONE]');
         const answerProcessor = processorFor('answer');
         expect(answerProcessor.getContent()).toEqual('Hello World!\nMore answer.');
         expect(answerProcessor.getCompleted()).toBe(true);
@@ -117,7 +129,7 @@ describe('SectionParser', () => {
         sectionParser.processChunk('A thought\n');
         sectionParser.processChunk('# An');
         sectionParser.processChunk('swer\nSome answer text');
-        sectionParser.finish();
+        sectionParser.processChunk('[DONE]');
         const answerProcessor = processorFor('answer');
         const thoughtProcessor = processorFor('thoughts');
         expect(answerProcessor.getCompleted()).toBe(true);
@@ -133,7 +145,7 @@ describe('SectionParser', () => {
         sectionParser.processChunk('# Reflection\nA reflection\n');
         sectionParser.processChunk('# Follow-up questions\n');
         sectionParser.processChunk('* The end\n');
-        sectionParser.finish();
+        sectionParser.processChunk('[DONE]');
         expect(processorFor('thoughts').getCompleted()).toBe(true);
         expect(processorFor('answer').getCompleted()).toBe(true);
         expect(processorFor('assumptions').getCompleted()).toBe(true);
@@ -144,5 +156,13 @@ describe('SectionParser', () => {
         expect(processorFor('assumptions').getContent()).toEqual('* An assumption\n');
         expect(processorFor('reflections').getContent()).toEqual('A reflection\n');
         expect(processorFor('followUps').getContent()).toEqual('* The end\n');
+    });
+
+    it ('calls the start and end handlers', () => {
+        sectionParser.processChunk('Hello ');
+        sectionParser.processChunk('World!');
+        sectionParser.processChunk('[DONE]');
+        expect(startCalled).toBe(true);
+        expect(endCalled).toBe(true);       
     });
 });

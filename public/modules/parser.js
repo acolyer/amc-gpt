@@ -23,13 +23,24 @@ class SectionParser {
     #headerRegex = null; 
     #sectionProcessor = null;
     #allHeaders = null;
+    #startHandler = null;
+    #endHandler = null;
 
-    constructor(sectionConfig) {
+    constructor(sectionConfig, startHandler, endHandler) {
         this.#config = sectionConfig;
         this.#currentSection = sectionConfig.defaultSection;
+        this.#startHandler = startHandler;
+        this.#endHandler = endHandler;
      }
 
      processChunk(chunkOfText) {
+        if (this.#rawContent == '') { this.#startHandler() }
+        if (chunkOfText == '[DONE]') {
+            this.finish();
+            this.#endHandler();
+            return;
+        }
+        
         this.#rawContent += chunkOfText;
         this.#buffer += chunkOfText;
         var match = null;
