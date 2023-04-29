@@ -1,19 +1,21 @@
 import { getChatMessages, logAssistantMessage, logSystemMessage, logUserMessage } from "./chat_log.js";
 import { getSystemPrompt, getUserPrompt } from "./prompt_engineering.js"
-import { initBindings, getApiKey, getUserInput, showChatMessage, onSendMessage, showSystemMessage, 
-         clearSystemMessages,
-         clearGPTOutputs, showWaiting, hideThinking, hideStreamingResponse } from "./bindings.js";
+import { initBindings, getApiKey, getUserInput, showUserChatMessage, onSendMessage, showSystemMessage, 
+         clearSystemMessages, sectionConfig,
+         clearGPTOutputs, showThinking, hideThinking,
+         disableSending, enableSending, createAssistantChatMessage,
+         startTyping, stopTyping } from "./bindings.js";
 import { getChatCompletion, getStreamedContent } from "./openai.js";
-import { numImages, parseResponse } from "./response_parsing.js";
-import { addResponseCost } from "./costings.js";
 import { initImagesExtension } from './showdown_images.js';
-import { resetContent, newContent } from "./streamed_response_parsing.js";
+import { SectionParser } from "./parser.js";
 
 console.log('amc-gpt starting');
 showdowns.init();
 initImagesExtension();
 initBindings();
 logSystemMessage(getSystemPrompt()); 
+var sectionParser = null;
+
 
 onSendMessage(async (event) => {
    event.preventDefault();
@@ -21,9 +23,8 @@ onSendMessage(async (event) => {
    clearGPTOutputs();
 
    const message = getUserInput();
-   showChatMessage('user', message);
-   resetContent();
-   showWaiting();
+   showUserChatMessage( message);
+   showThinking();
 
    const userPrompt = getUserPrompt(message);
    logUserMessage(userPrompt);
@@ -32,14 +33,28 @@ onSendMessage(async (event) => {
    if (apiKey == undefined || apiKey.length == 0) {
         showSystemMessage("API key is required");
         hideThinking();
-        hideStreamingResponse();
         return;
    } 
+
+   disableSending();
+   createAssistantChatMessage();
    const response = getChatCompletion(getApiKey(), getChatMessages());
    const data = await response;
    if (data.status == 200) {
-    getStreamedContent(data, content => { newContent(content); });
+      sectionParser = new SectionParser(sectionConfig, contentStart, contentEnd);
+      getStreamedContent(data, content => sectionParser.processChunk(content));
    } else {
       showSystemMessage(`Error returned from OpenAI API, status code: ${data.status}`);
    }
 });
+
+function contentStart() {
+   hideThinking();
+   startTyping();
+}
+
+function contentEnd() {
+   stopTyping();
+   logAssistantMessage(sectionParser.getRawContent());
+   enableSending();
+}

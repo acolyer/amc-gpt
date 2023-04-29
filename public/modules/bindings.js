@@ -1,8 +1,46 @@
 import { llmActivity } from './thinking.js';
 
+var thoughtContent = '';
+var answerContent = '';
+var assumptionsContent = '';
+var reflectionContent = '';
+var followUpsContent = '';
+var currentReplyContainer = null;
+
+const sectionConfig = {
+    defaultSection: 'answer',
+    sections: [
+        {
+            name: 'thoughts',
+            header: '# Thoughts',
+            processor: { newContent: addThoughts, finish: finishThoughts }
+        },
+        {
+            name: 'answer',
+            header: '# Answer',
+            processor: { newContent: addAnswer, finish: finishAnswer }
+        },
+        {
+            name: 'assumptions',
+            header: '# Assumptions',
+            processor: { newContent: addAssumptions, finish: finishAssumptions }
+        },
+        {
+            name: 'reflection',
+            header: '# Reflection',
+            processor: { newContent: addReflections, finish: finishReflections }
+        },
+        {
+            name: 'followUps',
+            header: '# Follow-up questions',
+            processor: { newContent: addFollowUps, finish: finishFollowUps }
+        }
+    ]
+}
+
 function initBindings() {
     setInterval(updateLLMActivity, 3000);
-    setInterval(blinkCursor, 600);
+    //setInterval(blinkCursor, 600);
  
     const apiKeyInput = document.getElementById('openAIAPIKey');
     apiKeyInput.classList.add('required-missing');
@@ -15,102 +53,85 @@ function initBindings() {
     });
 }
 
-function updateLLMActivity() {
-    const thinkingSpan = document.getElementById('llm-activity');
-    thinkingSpan.innerText = llmActivity();
+
+function addThoughts(thoughts) {
+    thoughtContent += thoughts;
+    setInnerText('thoughtsContainer', thoughtContent);
 }
 
-function blinkCursor() {
-    const cursorElement = document.getElementById('streamingResponseCursor');
-    if (cursorElement.innerText == '') {
-        cursorElement.innerText = '...';
-    } else {
-        cursorElement.innerText = '';
-    }
+function finishThoughts() {
+    setInnerText('thoughtsContainer', '');
+    addMarkdownContenttoSection('thoughtsContainer', thoughtContent);
 }
 
-function addMarkdownContentToElement(element, markdown) {
-    if (markdown.length == 0) { return; }
-    const markdownDiv = document.createElement('div');
-    showdowns.makeHtml(markdown).then(html => {
-        markdownDiv.innerHTML = html;
-        if (element.id == 'followUpsContainer') {
-            registerQuestionHandlers();
-        }
-    }).catch(error => {
-        console.log(`Showdowns rendering error: ${error}`);
-        markdownDiv.innerHTML = error;
-    });
-    element.appendChild(markdownDiv);
-    Prism.highlightAll();
+function addAnswer(answer) {
+    answerContent += answer;
+    currentReplyContainer.innerText = answerContent;
+    currentReplyContainer.scrollIntoView(true);
 }
 
-function addMarkdownContenttoSection(elementId, markdown) {
-    const element = document.getElementById(elementId);
-    addMarkdownContentToElement(element, markdown);
+function finishAnswer() {
+    currentReplyContainer.innerText = '';
+    const targetContainer = currentReplyContainer.parentElement;
+    addMarkdownContentToElement(
+        targetContainer,
+        answerContent,
+        element => addMessageMetadata(element));
 }
 
-function showThoughts(thoughts) {
-    addMarkdownContenttoSection('thoughtsContainer', thoughts);
+function addAssumptions(assumptions) {
+    assumptionsContent += assumptions;
+    setInnerText('assumptionsContainer', assumptionsContent);
 }
 
-function showReflection(reflection) { 
-    addMarkdownContenttoSection('reflectionsContainer', reflection);
+function finishAssumptions() { 
+    setInnerText('reflectionsContainer', '');
+    addMarkdownContenttoSection('reflectionsContainer', reflectionContent);
 }
 
-function showAssumptions(assumptions) {
-    addMarkdownContenttoSection('assumptionsContainer', assumptions);
+function addReflections(reflections) {
+    reflectionContent += reflections;
+    setInnerText('reflectionsContainer', reflectionContent);
 }
 
-function registerQuestionHandlers() {
-    const questions = document.querySelectorAll('#followUpsContainer li');
-    questions.forEach(question => {
-        question.addEventListener('click', event => {
-            askQuestion(question.innerText);
-        });
-    });
+function finishReflections() { 
+    setInnerText('reflectionsContainer', '');
+    addMarkdownContenttoSection('reflectionsContainer', reflectionContent);
+}
+
+function addFollowUps(followUps) {
+    followUpsContent += followUps;
+    setInnerText('followUpsContainer', followUpsContent);
+}
+
+function finishFollowUps() {
+    setInnerText('followUpsContainer', '');
+    addMarkdownContenttoSection(
+        'followUpsContainer',
+         followUpsContent,
+         _element => registerQuestionHandlers()
+      );
 }
 
 function askQuestion(question) {
     document.getElementById('userMessage').value = question;
 }
 
-function showFollowUps(followUps) { 
-    addMarkdownContenttoSection('followUpsContainer', followUps);
-}
 
-function createChatMessageContainer(role) {
-    const newArticle = document.createElement('article');
-    newArticle.classList.add('chatMessage');
-    newArticle.classList.add(role);
-    const avatar = document.createElement('img');
-    avatar.classList.add('avatar');
-    if (role == 'user') {
-        avatar.src = 'images/avatar-user.png';
-    } else {
-        avatar.src = 'images/openai-logo.png';
-    }
-    avatar.alt = "Avatar";
-    newArticle.appendChild(avatar);
-    return newArticle;
-}
-
-function addMessageMetadata(container, role, usage, numImages, cost) {
-    const metadataElement = document.createElement("span");
-    metadataElement.classList.add("metadata");
-    var metadata = new Date().toTimeString().slice(0, 5);
-    metadataElement.textContent = metadata;
-    container.appendChild(metadataElement);
-}
-
-function showChatMessage(role, message, usage, numImages, cost) {
-    const chatMessageContainer = createChatMessageContainer(role);
+function showUserChatMessage(message) {
+    const chatMessageContainer = createChatMessageContainer('user');
     addMarkdownContentToElement(chatMessageContainer, message);
-    addMessageMetadata(chatMessageContainer, role, usage, numImages, cost);
+    addMessageMetadata(chatMessageContainer);
     document.getElementById('chatHistory').appendChild(chatMessageContainer);
-    if (role == 'user') {
-        document.getElementById('userMessage').value = '';
-    }
+    document.getElementById('userMessage').value = '';
+    chatMessageContainer.scrollIntoView(true);
+}
+
+function createAssistantChatMessage() {
+    const chatMessageContainer = createChatMessageContainer('assistant');
+    document.getElementById('chatHistory').appendChild(chatMessageContainer);
+    currentReplyContainer = document.createElement('div');
+    chatMessageContainer.appendChild(currentReplyContainer);
     chatMessageContainer.scrollIntoView(true);
 }
 
@@ -119,11 +140,15 @@ function showSystemMessage(message) {
 }
 
 function clearGPTOutputs() {
-    document.getElementById('thoughtsContainer').innerHTML = '';
-    document.getElementById('assumptionsContainer').innerHTML = '';
-    document.getElementById('reflectionsContainer').innerHTML = '';
-    document.getElementById('followUpsContainer').innerHTML = '';
-    document.getElementById('streamingResponseContent').innerText = '';
+    thoughtContent = '';
+    answerContent = '';
+    assumptionsContent = '';
+    reflectionContent = '';
+    followUpsContent = '';
+    document.getElementById('thoughtsContainer').innerHTML = thoughtContent;
+    document.getElementById('assumptionsContainer').innerHTML = assumptionsContent;
+    document.getElementById('reflectionsContainer').innerHTML = reflectionContent;
+    document.getElementById('followUpsContainer').innerHTML = followUpsContent;
 }
 
 function clearSystemMessages() {
@@ -143,38 +168,116 @@ function onSendMessage(handler) {
     document.getElementById('userMessage').addEventListener("keydown", event => {
         if ((event.metaKey || event.ctrlKey) && event.keyCode === 13) {
             event.preventDefault();
-            handler();
+            if (document.getElementById('sendMessageButton').disabled == false) {
+                handler();
+            }
         }
     });
 }
 
-function showWaiting() {
+function disableSending() {
+    document.getElementById('sendMessageButton').disabled = true;
+}
+
+function enableSending() {
+    document.getElementById('sendMessageButton').disabled = false;
+}
+
+function showThinking() {
     document.getElementById('thinking').style.display = 'flex';
-    document.getElementById('streamingResponse').style.display = 'flex';
 }
 
 function hideThinking() { 
     document.getElementById('thinking').style.display = 'none';
 }
 
-function hideStreamingResponse() { 
-    document.getElementById('streamingResponse').style.display = 'none';
+function startTyping() {
+    const audio = document.querySelector("audio");
+    audio.play();
 }
 
-function addStreamingContent(content) { 
-    document.getElementById('streamingResponseContent').innerText = content;
+function stopTyping() {
+    const audio = document.querySelector("audio");
+    audio.pause();
+
 }
 
-function showResponseMetadata(usage, numImages, cost) {
-    const metadata = `  ${usage.total_tokens} tokens, ${numImages} images, message cost: \$${cost}`;
-    const targetElement = document.querySelector('.metadata:last-of-type');
-    targetElement.textContent = targetElement.textContent + metadata;
+function registerQuestionHandlers() {
+    const questions = document.querySelectorAll('#followUpsContainer li');
+    questions.forEach(question => {
+        question.addEventListener('click', event => {
+            askQuestion(question.innerText);
+        });
+    });
+}
+
+function updateLLMActivity() {
+    const thinkingSpan = document.getElementById('llm-activity');
+    thinkingSpan.innerText = llmActivity();
+}
+
+function blinkCursor() {
+    const cursorElement = document.getElementById('streamingResponseCursor');
+    if (cursorElement.innerText == '') {
+        cursorElement.innerText = '...';
+    } else {
+        cursorElement.innerText = '';
+    }
+}
+
+function addMarkdownContentToElement(element, markdown, postProcessor=null) {
+    if (markdown.length == 0) { return; }
+    const markdownDiv = document.createElement('div');
+    element.appendChild(markdownDiv);
+    showdowns.makeHtml(markdown).then(html => {
+        markdownDiv.innerHTML = html;
+        Prism.highlightAll();
+        if (postProcessor) { 
+            postProcessor(element);
+        }
+    }).catch(error => {
+        console.log(`Showdowns rendering error: ${error}`);
+        markdownDiv.innerHTML = error;
+    });
+}
+
+function addMarkdownContenttoSection(elementId, markdown, postProcessor=null) {
+    const element = document.getElementById(elementId);
+    addMarkdownContentToElement(element, markdown, postProcessor);
+}
+
+function setInnerText(containerId, content) {
+    const container = document.getElementById(containerId);
+    container.innerText = content;
+}
+
+function createChatMessageContainer(role) {
+    const newArticle = document.createElement('article');
+    newArticle.classList.add('chatMessage');
+    newArticle.classList.add(role);
+    const avatar = document.createElement('img');
+    avatar.classList.add('avatar');
+    if (role == 'user') {
+        avatar.src = 'images/avatar-user.png';
+    } else {
+        avatar.src = 'images/openai-logo.png';
+    }
+    avatar.alt = "Avatar";
+    newArticle.appendChild(avatar);
+    return newArticle;
+}
+
+function addMessageMetadata(container) {
+    const metadataElement = document.createElement("span");
+    metadataElement.classList.add("metadata");
+    var metadata = new Date().toTimeString().slice(0, 5);
+    metadataElement.textContent = metadata;
+    container.appendChild(metadataElement);
 }
 
 
-
-
-export { initBindings, showThoughts, showReflection, showAssumptions, showFollowUps, showChatMessage,
-         onSendMessage, getUserInput, getApiKey, showSystemMessage, clearSystemMessages,
-         showWaiting, hideThinking, hideStreamingResponse, clearGPTOutputs, addStreamingContent,
-        showResponseMetadata }
+export { initBindings, askQuestion, showUserChatMessage, createAssistantChatMessage,
+         clearGPTOutputs, showSystemMessage, clearSystemMessages,
+         getUserInput, getApiKey, onSendMessage,
+         showThinking, hideThinking, disableSending, enableSending, 
+         startTyping, stopTyping, sectionConfig  }
