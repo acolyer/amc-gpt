@@ -46,11 +46,19 @@ function initBindings() {
     const apiKeyInput = document.getElementById('openAIAPIKey');
     apiKeyInput.classList.add('required-missing');
     apiKeyInput.addEventListener('change', () => {
-    if (apiKeyInput.value == '') { 
-        apiKeyInput.classList.add('required-missing');
-    } else {
-        apiKeyInput.classList.remove('required-missing');
-    }
+        if (apiKeyInput.value == '') { 
+            apiKeyInput.classList.add('required-missing');
+        } else {
+            apiKeyInput.classList.remove('required-missing');
+        }
+    });
+
+    const typewriter = document.getElementById('typewriter');
+    typewriter.addEventListener('click', () => {
+        if (!typewriter.checked) {
+            const audio = document.querySelector("audio");
+            audio.pause();
+        }
     });
 }
 
@@ -193,13 +201,14 @@ function hideThinking() {
 
 function startTyping() {
     const audio = document.querySelector("audio");
-    audio.play();
+    if (document.getElementById('typewriter').checked) {
+        audio.play();
+    }
 }
 
 function stopTyping() {
     const audio = document.querySelector("audio");
     audio.pause();
-
 }
 
 function rememberContent() {

@@ -208,3 +208,7 @@ img.openai {
     height: 512px;
     border: 1px solid silver;
 }
+
+footer {
+    color: gray;
+}

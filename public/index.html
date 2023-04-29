@@ -34,7 +34,7 @@
                 </p>
             </div>
             <!-- sound effect from pixabay -->
-            <audio src="./sounds/type-writing-6834.mp3" loop="true"></audio>
+            <audio src="./sounds/typewriter.mp3" loop="true"></audio>
 
             <section id="sendMessage">
                 <form id="sendMessageForm">
@@ -63,6 +63,8 @@
           <form>
             <label for="openAIAPIKey">OpenAI API Key:</label>
             <input type="password" id="openAIAPIKey" placeholder="sk-... (required)" required>
+            <label for="typewriter">Typewriter</label>
+            <input type="checkbox" id="typewriter" checked>
           </form>
         </section>
 
@@ -90,8 +92,17 @@
           <p>(Click on a question to copy it to the input box)</p>
           <div id="followUpsContainer"></div>
         </section>
+
+        <footer>
+          <hr>
+          <small>
+           Credits: Meerkat icon from <a href="https://iconarchive.com">iconarchive.com</a>,
+           typewriter sound from <a href="https://pixabay.com">pixabay.com</a>.
+          </small>
+        </footer>
       </aside>
     </div>
+
 
     <script type="module" src="modules/main.js"></script>
 </body>
