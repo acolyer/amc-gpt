@@ -41,7 +41,6 @@ const sectionConfig = {
 
 function initBindings() {
     setInterval(updateLLMActivity, 3000);
-    //setInterval(blinkCursor, 600);
  
     const apiKeyInput = document.getElementById('openAIAPIKey');
     apiKeyInput.classList.add('required-missing');
@@ -248,15 +247,6 @@ function registerQuestionHandlers() {
 function updateLLMActivity() {
     const thinkingSpan = document.getElementById('llm-activity');
     thinkingSpan.innerText = llmActivity();
-}
-
-function blinkCursor() {
-    const cursorElement = document.getElementById('streamingResponseCursor');
-    if (cursorElement.innerText == '') {
-        cursorElement.innerText = '...';
-    } else {
-        cursorElement.innerText = '';
-    }
 }
 
 function addMarkdownContentToElement(element, markdown, postProcessor=null) {
