@@ -4,7 +4,7 @@ import { initBindings, getApiKey, getUserInput, showUserChatMessage, onSendMessa
          clearSystemMessages, sectionConfig,
          clearGPTOutputs, showThinking, hideThinking,
          disableSending, enableSending, createAssistantChatMessage,
-         startTyping, stopTyping } from "./bindings.js";
+         startTyping, stopTyping, rememberContent } from "./bindings.js";
 import { getChatCompletion, getStreamedContent } from "./openai.js";
 import { initImagesExtension } from './showdown_images.js';
 import { SectionParser } from "./parser.js";
@@ -56,5 +56,6 @@ function contentStart() {
 function contentEnd() {
    stopTyping();
    logAssistantMessage(sectionParser.getRawContent());
+   rememberContent();
    enableSending();
 }

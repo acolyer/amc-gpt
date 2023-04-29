@@ -1,5 +1,6 @@
 import { llmActivity } from './thinking.js';
 
+
 var thoughtContent = '';
 var answerContent = '';
 var assumptionsContent = '';
@@ -85,8 +86,8 @@ function addAssumptions(assumptions) {
 }
 
 function finishAssumptions() { 
-    setInnerText('reflectionsContainer', '');
-    addMarkdownContenttoSection('reflectionsContainer', reflectionContent);
+    setInnerText('assumptionsContainer', '');
+    addMarkdownContenttoSection('assumptionsContainer', assumptionsContent);
 }
 
 function addReflections(reflections) {
@@ -110,7 +111,7 @@ function finishFollowUps() {
         'followUpsContainer',
          followUpsContent,
          _element => registerQuestionHandlers()
-      );
+    );
 }
 
 function askQuestion(question) {
@@ -166,10 +167,9 @@ function getApiKey() {
 function onSendMessage(handler) {
     document.getElementById('sendMessageButton').addEventListener('click', handler);
     document.getElementById('userMessage').addEventListener("keydown", event => {
-        if ((event.metaKey || event.ctrlKey) && event.keyCode === 13) {
-            event.preventDefault();
+        if ((event.metaKey || event.ctrlKey) && event.key == 'Enter') {
             if (document.getElementById('sendMessageButton').disabled == false) {
-                handler();
+                handler(event);
             }
         }
     });
@@ -200,6 +200,31 @@ function stopTyping() {
     const audio = document.querySelector("audio");
     audio.pause();
 
+}
+
+function rememberContent() {
+    const contentComponents = getAssistantMessageComponents();
+    currentReplyContainer.parentElement.addEventListener('click', () => {
+        setInnerText('thoughtsContainer', '');
+        setInnerText('assumptionsContainer', '');
+        setInnerText('reflectionsContainer', '');
+        setInnerText('followUpsContainer', '');
+        addMarkdownContenttoSection('thoughtsContainer', contentComponents.thoughts)
+        addMarkdownContenttoSection('assumptionsContainer', contentComponents.assumptions);
+        addMarkdownContenttoSection('reflectionsContainer', contentComponents.reflections);
+        addMarkdownContenttoSection('followUpsContainer', contentComponents.followUps,
+                                     _element => registerQuestionHandlers());
+    });
+}
+
+function getAssistantMessageComponents() {
+    return {
+        thoughts: thoughtContent.slice(),
+        answer: answerContent.slice(),
+        assumptions: assumptionsContent.slice(),
+        reflections: reflectionContent.slice(),
+        followUps: followUpsContent.slice()
+    }
 }
 
 function registerQuestionHandlers() {
@@ -280,4 +305,4 @@ export { initBindings, askQuestion, showUserChatMessage, createAssistantChatMess
          clearGPTOutputs, showSystemMessage, clearSystemMessages,
          getUserInput, getApiKey, onSendMessage,
          showThinking, hideThinking, disableSending, enableSending, 
-         startTyping, stopTyping, sectionConfig  }
+         startTyping, stopTyping, rememberContent, sectionConfig  }
