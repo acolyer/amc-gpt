@@ -68,9 +68,8 @@ as needed in these delimiters.
 
 ## TODOs
 
-- [ ] Show cursor in each output section
-- [ ] Use CSS for the cursor rather than an interval timer
 - [ ] Allow the user to cancel an in-flight request
+- [x] Re-enable input controls if an error comes back from OpenAI!
 - [ ] Style the send button so that the enabled/disabled states are more visually distinct
 - [ ] Add the ability to speak your message and send it to the Whisper API for transcription
 - [ ] Add a 'conversational' response prompt option and allow reading of answer sections using TTS (e.g. ElevenLabs)

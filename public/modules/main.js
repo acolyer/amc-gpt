@@ -45,6 +45,8 @@ onSendMessage(async (event) => {
       getStreamedContent(data, content => sectionParser.processChunk(content));
    } else {
       showSystemMessage(`Error returned from OpenAI API, status code: ${data.status}`);
+      stopTyping();
+      enableSending();
    }
 });
 
