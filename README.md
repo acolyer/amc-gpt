@@ -74,7 +74,8 @@ as needed in these delimiters.
 - [ ] Style the send button so that the enabled/disabled states are more visually distinct
 - [ ] Add the ability to speak your message and send it to the Whisper API for transcription
 - [ ] Add a 'conversational' response prompt option and allow reading of answer sections using TTS (e.g. ElevenLabs)
-- [x] Typewriter sound while content is streaming?
+- [x] Typewriter sound while content is streaming
+- [x] Option to turn off typewriter sound!
 
 
 ## Possible future enhancements
@@ -91,3 +92,8 @@ as needed in these delimiters.
   anywhere...
 * When in listening mode, is it possible to detect natural pauses and have the speech sent off for
   transcription automatically when they occur?
+
+  ## Credits
+
+  * Typewriter sound effect trimmed from an original at pixabay
+  * Meerkat icon from https://iconarchive.com
