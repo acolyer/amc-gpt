@@ -32,13 +32,9 @@
                 <p>Waiting for a reply. Current ChatGPT status:
                 <span id="llm-activity"></span>
                 </p>
-             </div>
-             <div id="streamingResponse">
-                <p>
-                 <span id="streamingResponseContent"></span>
-                 <span id="streamingResponseCursor"></span>
-                </p>
-             </div>
+            </div>
+            <!-- sound effect from pixabay -->
+            <audio src="./sounds/type-writing-6834.mp3" loop="true"></audio>
 
             <section id="sendMessage">
                 <form id="sendMessageForm">
@@ -73,7 +69,8 @@
         <section id="thoughts">
           <!-- thoughts extracted from ChatGPT's responses -->
           <h2>Thoughts</h2>
-          <div id="thoughtsContainer"</div>
+          <div id="thoughtsContainer">
+          </div>
         </section>
 
         <section id="assumptions">
