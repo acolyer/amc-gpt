@@ -63,6 +63,9 @@ function initBindings() {
 
 
 function addThoughts(thoughts) {
+    if (thoughtContent == '') { 
+        document.getElementById('thoughtsContainer').scrollIntoView(true);
+    }
     thoughtContent += thoughts;
     setInnerText('thoughtsContainer', thoughtContent);
 }
@@ -73,9 +76,12 @@ function finishThoughts() {
 }
 
 function addAnswer(answer) {
+    if (answerContent == '') { 
+        // only scroll the first time we send it content
+        currentReplyContainer.scrollIntoView(true);
+    }
     answerContent += answer;
     currentReplyContainer.innerText = answerContent;
-    currentReplyContainer.scrollIntoView(true);
 }
 
 function finishAnswer() {
@@ -88,6 +94,9 @@ function finishAnswer() {
 }
 
 function addAssumptions(assumptions) {
+    if (assumptionsContent == '') { 
+        document.getElementById('assumptionsContainer').scrollIntoView(true);
+    }
     assumptionsContent += assumptions;
     setInnerText('assumptionsContainer', assumptionsContent);
 }
@@ -98,6 +107,9 @@ function finishAssumptions() {
 }
 
 function addReflections(reflections) {
+    if (reflectionContent == '') { 
+        document.getElementById('reflectionsContainer').scrollIntoView(true);
+    }
     reflectionContent += reflections;
     setInnerText('reflectionsContainer', reflectionContent);
 }
@@ -108,6 +120,9 @@ function finishReflections() {
 }
 
 function addFollowUps(followUps) {
+    if (followUpsContent == '') { 
+        document.getElementById('followUpsContainer').scrollIntoView(true);
+    }
     followUpsContent += followUps;
     setInnerText('followUpsContainer', followUpsContent);
 }
@@ -122,7 +137,9 @@ function finishFollowUps() {
 }
 
 function askQuestion(question) {
-    document.getElementById('userMessage').value = question;
+    const userMessage = document.getElementById('userMessage');
+    userMessage.value = question;
+    userMessage.scrollIntoView(true);
 }
 
 
