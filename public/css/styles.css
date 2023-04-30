@@ -15,7 +15,6 @@ h1 {
 
 #primaryContent {
     flex: 0 0 60%;
-    min-width: 720px;
     padding: 20px;
 }
 
@@ -52,6 +51,7 @@ aside {
     margin: 0 auto;
     padding: 0px;
     border-radius: 5px;
+    width: 85%;
 }
 
 .chatMessage {
@@ -103,23 +103,30 @@ aside {
 #sendMessage {
     padding-top: 20px;
     padding-left: 30px; 
+    width: 90%;
+}
+
+#sendMessageForm {
+    display: flex;
+    justify-content: flex-start;
 }
 
 #sendMessageButton {
-    vertical-align: bottom;
-    position: relative;
-    left: 0px;
-    bottom: 5px;
+    float: left;
+    width: 32px;
+    height: 20px;
+    margin-top: auto;
+    margin-bottom: 2px;
+    margin-left: 5px;
+    margin-right: auto;
 }
 
 #userMessage {
-    max-width: 680px;
     width: 100%;
     height: 50px;
     line-height: 1.5;
     border-radius: 6px;
     border: 1px solid #ccc;
-    margin: 0 auto;
     font-size: 16px;
 }
 
@@ -137,14 +144,6 @@ aside {
 
 #llm-activity {
     font-style: italic;
-}
-
-#streamingResponse {
-    display: none;
-    width: 100%;
-    max-width: 680px;
-    float: left;
-    margin-top: 0px;
 }
 
 table {
