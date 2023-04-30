@@ -114,8 +114,6 @@ aside {
 
 #sendMessageButton {
     float: left;
-    width: 32px;
-    height: 20px;
     margin-top: auto;
     margin-bottom: 2px;
     margin-left: 5px;
@@ -123,12 +121,7 @@ aside {
 }
 
 #sendMessageButton:disabled svg {
-    fill: lightgray;
-}
-
-svg {
-    -webkit-transform: translate(0px,0px); /* Safari and Chrome */
-    transform: translate(0px,0px);
+    fill: #bbb;
 }
 
 #userMessage {
