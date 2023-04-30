@@ -121,6 +121,11 @@ aside {
     margin-right: auto;
 }
 
+svg {
+    -webkit-transform: translate(0px,0px); /* Safari and Chrome */
+    transform: translate(0px,0px);
+}
+
 #userMessage {
     width: 100%;
     height: 50px;
