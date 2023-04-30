@@ -59,8 +59,13 @@ function initBindings() {
             audio.pause();
         }
     });
-}
 
+    const userMessage = document.getElementById('userMessage');
+    userMessage.addEventListener('input', () => { 
+        userMessage.style.height = 0;
+        userMessage.style.height = (userMessage.scrollHeight) + 'px';
+    });
+}
 
 function addThoughts(thoughts) {
     if (thoughtContent == '') { 
