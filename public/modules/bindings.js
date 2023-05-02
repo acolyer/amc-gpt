@@ -67,6 +67,12 @@ function initBindings() {
     });
 }
 
+function resetUserMessageSize() {
+    const userMessage = document.getElementById('userMessage');
+    userMessage.style.height = 0;
+    userMessage.style.height = (userMessage.scrollHeight) + 'px';    
+}
+
 function addThoughts(thoughts) {
     if (thoughtContent == '') { 
         document.getElementById('thoughtsContainer').scrollIntoView(true);
@@ -145,6 +151,7 @@ function askQuestion(question) {
     const userMessage = document.getElementById('userMessage');
     userMessage.value = question;
     userMessage.scrollIntoView(true);
+    resetUserMessageSize();
 }
 
 
@@ -154,6 +161,7 @@ function showUserChatMessage(message) {
     addMessageMetadata(chatMessageContainer);
     document.getElementById('chatHistory').appendChild(chatMessageContainer);
     document.getElementById('userMessage').value = '';
+    resetUserMessageSize();
     chatMessageContainer.scrollIntoView(true);
 }
 
