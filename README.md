@@ -6,6 +6,8 @@ playground interfaces it provides for:
 * Rich output, with the ability to render basic text styles (markdown), math, and some charts and  
   diagrams e.g. pie charts, gantt charts, mindmaps, flow diagrams etc. (mermaid). It also simulates
   multi-modal *output* (but not input) by asking ChatGPT to describe images that it would like to accompany its responses, and then having those images generated and rendered inline.
+* Rudimentary support for Anki-style flashcards (ask it generate cards for you, and then test
+  yourself using them inline in the response (see [screenshots](#examples-of-amc-gpt-in-action) below).
 * Commentary on the main answer, by asking ChatGPT to show its thinking and any assumptions that
   were made in producing the answer. ChatGPT is also asked to critique the answer which highlights useful things to be aware of in some circumstances.
 * Suggestions for follow-up questions you might like to ask, clicking on any of these copies it into
@@ -81,6 +83,11 @@ as needed in these delimiters.
 
 ![Math example](screenshots/Math.png)
 
+### Anki-style flashcards
+
+You can ask for flashcards or Anki cards, and assuming ChatGPT follows the requested format for these, they will render inline. Only plain text front and back cards are currently rendered (no cloze support for example).
+
+![Anki example](screenshots/Anki.png)
 
 ## Roadmap
 
