@@ -90,8 +90,11 @@ function finishThoughts() {
 }
 
 function addAnswer(answer) {
-    if (singleColumnLayout && answerContent == '') {
-        currentReplyContainer.scrollIntoView(true);
+    if (singleColumnLayout)  {
+        // only scroll the first time on single column layouts
+        if (answerContent == '') {
+          currentReplyContainer.scrollIntoView(true);
+        }
     } else {
         document.getElementById('userMessage').scrollIntoView(true);      
     }
