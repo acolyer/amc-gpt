@@ -7,6 +7,7 @@ var assumptionsContent = '';
 var reflectionContent = '';
 var followUpsContent = '';
 var currentReplyContainer = null;
+var singleColumnLayout = false;
 
 const sectionConfig = {
     defaultSection: 'answer',
@@ -65,6 +66,8 @@ function initBindings() {
         userMessage.style.height = 0;
         userMessage.style.height = (userMessage.scrollHeight) + 'px';
     });
+
+    singleColumnLayout = window.matchMedia('screen and (max-width: 1200px)').matches;
 }
 
 function resetUserMessageSize() {
@@ -87,7 +90,11 @@ function finishThoughts() {
 }
 
 function addAnswer(answer) {
-    document.getElementById('userMessage').scrollIntoView(true);
+    if (singleColumnLayout && answerContent == '') {
+        currentReplyContainer.scrollIntoView(true);
+    } else {
+        document.getElementById('userMessage').scrollIntoView(true);      
+    }
     answerContent += answer;
     currentReplyContainer.innerText = answerContent;
 }
