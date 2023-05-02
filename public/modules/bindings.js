@@ -81,10 +81,7 @@ function finishThoughts() {
 }
 
 function addAnswer(answer) {
-    if (answerContent == '') { 
-        // only scroll the first time we send it content
-        currentReplyContainer.scrollIntoView(true);
-    }
+    document.getElementById('userMessage').scrollIntoView(true);
     answerContent += answer;
     currentReplyContainer.innerText = answerContent;
 }
@@ -95,7 +92,10 @@ function finishAnswer() {
     addMarkdownContentToElement(
         targetContainer,
         answerContent,
-        element => addMessageMetadata(element));
+        element => {
+            addMessageMetadata(element);
+            addAnkiEventListeners()
+        });
 }
 
 function addAssumptions(assumptions) {
@@ -319,6 +319,26 @@ function addMessageMetadata(container) {
     var metadata = new Date().toTimeString().slice(0, 5);
     metadataElement.textContent = metadata;
     container.appendChild(metadataElement);
+}
+
+function addAnkiEventListeners() {
+    //console.log('Adding Anki listeners')
+    const ankiCards = document.querySelectorAll('.anki');
+    ankiCards.forEach(card => {
+       // console.log(`adding listener to card ${card}`)
+        const front = card.querySelector('.front');
+        const back = card.querySelector('.back');
+        const flipButton = card.querySelector('button');
+        flipButton.addEventListener('click', _ => {
+            if (front.style.display != 'none') {
+                front.style.display = 'none';
+                back.style.display = 'block';
+            } else {
+                front.style.display = 'block';
+                back.style.display = 'none';
+            }
+        });
+    });
 }
 
 

@@ -214,3 +214,40 @@ img.openai {
 footer {
     color: gray;
 }
+
+.anki {
+    display: block;
+    background-color: rgb(62, 87, 146);
+    border-radius: 10px;
+    color: white;
+    font-size: 1.5rem;
+    padding: 10px;
+    margin: 10px;
+    overflow: hidden;
+}
+
+.anki button {
+    float: right;
+}
+
+.anki .front {
+    display: block;
+}
+
+.anki .front::before {
+    content: 'Front';
+    font-size: 0.8rem;
+    font-family: 'Courier New', Courier, monospace;
+    color: orange;
+}
+
+.anki .back::before {
+    content: 'Back';
+    font-size: 0.8rem;
+    font-family: 'Courier New', Courier, monospace;
+    color: lightgreen;  
+}
+
+.anki .back {
+    display: none;
+}

@@ -7,11 +7,13 @@ import { initBindings, getApiKey, getUserInput, showUserChatMessage, onSendMessa
          startTyping, stopTyping, rememberContent } from "./bindings.js";
 import { getChatCompletion, getStreamedContent } from "./openai.js";
 import { initImagesExtension } from './showdown_images.js';
+import { initAnkiExtension } from "./showdown_anki.js";
 import { SectionParser } from "./parser.js";
 
 console.log('amc-gpt starting');
 showdowns.init();
 initImagesExtension();
+initAnkiExtension();
 initBindings();
 logSystemMessage(getSystemPrompt()); 
 var sectionParser = null;

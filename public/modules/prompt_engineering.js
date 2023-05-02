@@ -72,6 +72,21 @@ An orchard with fruit trees in blossom and daffodils growing beneath them.
 \`\`\`
 `;
 
+const flashCards = `\
+To create flash cards or Anki cards you should use the Anki format and enclose each card in a 
+markdown block of type anki, for example:
+
+\`\`\`anki
+Front: front of first card
+Back: back of first card
+\`\`\`
+
+\`\`\anki
+Front: front of second card
+Back: back of second card
+\`\`\
+`;
+
 const chainOfThought = `\
 Before giving your final answer, please show your thinking and
 step by step plan for creating the answer. Include an assessment
@@ -131,6 +146,7 @@ function mediaPrompt() {
         charts,
         graphs,
         math,
+        flashCards,
         useChartsAndTables,
         images,
     ].join('\n\n');
