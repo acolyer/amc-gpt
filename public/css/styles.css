@@ -20,6 +20,7 @@ h1 {
 
 aside {
     margin-left: 20px;
+    margin-top: auto;
 }
 
 #thoughtsContainer, #assumptionsContainer, #reflectionsContainer, #followUpsContainer
@@ -43,8 +44,6 @@ aside {
     justify-content: center space-between;
     align-items: center;
     font-size: 16px;
-    overflow-y: auto;
-    max-height: 100vh;
 }
 
 #chatHistory {
