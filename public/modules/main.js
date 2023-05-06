@@ -45,9 +45,9 @@ function contentStart() {
  * The last chunk of the streaming response has arrived, and hence there
  * will be no more new content for this reply. 
  */
-function contentEnd() {
+function contentEnd(rawContent) {
    stopTyping();
-   logAssistantMessage(sectionParser.getRawContent());
+   logAssistantMessage(rawContent);
    rememberContent();
    enableSending();
 }

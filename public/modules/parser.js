@@ -37,7 +37,7 @@ class SectionParser {
         if (this.#rawContent == '') { this.#startHandler() }
         if (chunkOfText == '[DONE]') {
             this.finish();
-            this.#endHandler();
+            this.#endHandler(this.getRawContent());
             return;
         }
         
