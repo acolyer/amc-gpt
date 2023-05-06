@@ -81,7 +81,7 @@ Front: front of first card
 Back: back of first card
 \`\`\`
 
-\`\`\anki
+\`\`\`anki
 Front: front of second card
 Back: back of second card
 \`\`\
