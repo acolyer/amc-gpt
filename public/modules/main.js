@@ -4,7 +4,7 @@ import { initBindings, getApiKey, getUserInput, showUserChatMessage, onSendMessa
          clearSystemMessages, sectionConfig,
          clearGPTOutputs, showThinking, hideThinking,
          disableSending, enableSending, createAssistantChatMessage,
-         startTyping, stopTyping, rememberContent } from "./bindings.js";
+         startTyping, stopTyping, rememberContent, getModelName } from "./bindings.js";
 import { getChatCompletion, getStreamedContent } from "./openai.js";
 import { initImagesExtension } from './showdown_images.js';
 import { initAnkiExtension } from "./showdown_anki.js";
@@ -81,7 +81,7 @@ function prepareUIForNewMessageExchange(userMessage) {
 }
 
 async function sendMessageAndStreamResponse() {
-   const response = getChatCompletion(getApiKey(), getChatMessages());
+   const response = getChatCompletion(getApiKey(), getChatMessages(), getModelName());
    const data = await response;
    if (data.status == 200) {
       const sectionParser = new SectionParser(sectionConfig, contentStart, contentEnd);

@@ -65,8 +65,15 @@
           <form>
             <label for="openAIAPIKey">OpenAI API Key:</label>
             <input type="password" id="openAIAPIKey" placeholder="sk-... (required)" required>
-            <label for="typewriter">Typewriter</label>
+            <label for="typewriter">Typewriter effect:</label>
             <input type="checkbox" id="typewriter" checked>
+            <label for="modelNameSelect">Model:</label>
+            <select id="modelNameSelect">
+              <option value="gpt-3.5-turbo" selected>gpt-3.5-turbo</option>
+              <option value="gpt-4">gpt-4</option>
+            </select>, or
+            <label for="fineTunedModel">your own fine-tuned model:</label>
+            <input id="fineTunedModelId" placeholder="model-name">
           </form>
         </section>
 

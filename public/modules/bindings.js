@@ -359,9 +359,17 @@ function addAnkiEventListeners() {
     });
 }
 
+function getModelName() {
+    const customModel = document.getElementById('fineTunedModelId').value;
+    if (customModel && customModel != '') {
+        return customModel;
+    }
+    return document.getElementById('modelNameSelect').value;
+}
+
 
 export { initBindings, askQuestion, showUserChatMessage, createAssistantChatMessage,
          clearGPTOutputs, showSystemMessage, clearSystemMessages,
          getUserInput, getApiKey, onSendMessage,
          showThinking, hideThinking, disableSending, enableSending, 
-         startTyping, stopTyping, rememberContent, sectionConfig  }
+         startTyping, stopTyping, rememberContent, getModelName, sectionConfig  }
