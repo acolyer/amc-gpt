@@ -3,6 +3,7 @@ import { GPT_35_TURBO, GPT_4 } from "./model_names.js";
 const chatLog = [];
 
 function logChatMessage(messageType, text) {
+    console.log(`${messageType}:\n${text}`);
     chatLog.push({
         role: messageType,
         content: text
