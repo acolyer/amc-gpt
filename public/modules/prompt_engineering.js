@@ -102,13 +102,16 @@ you had to make in order to produce it.
 
 const reflection = `\
 After giving your thoughts, final answer, and listing assumptions made, you should provide a 
-critique of your answer. Does it meet all of the requirements given above? Are there alternative
-answers or positions that might be better?
+critique of your answer. Does it provide the best possible answer to the question given? 
+Does it make appropriate use of media? Does it contain any flaws or faultly logic?
+How could it be further improved? Let's work this out in a step by step way to be sure we have the best assessment.
 `;
 
 const followUps = `\
 At the end of your reply, please include a bulleted list of follow-up questions that could be 
-used to explore the subject area more deeply.
+used to explore the subject area more deeply. If the critique suggests that the answer
+you gave could be improved, please include the question "Can you improve this answer based
+on the critique provided please?"
 `;
 
 const responseStructure = `\
@@ -134,6 +137,13 @@ Here you will provide your critique of the answer.
 
 * Here you will provide your list of follow-up questions.
 
+`;
+
+const userPromptEnding = `\
+Use the # Thoughts, # Answer, # Assumptions, # Reflection, # Follow-up questions structure
+for your reply.
+
+Answer: Let's work this out in a step by step way to be sure we have the right answer.
 `;
 
 function timePrompt() {
@@ -170,7 +180,8 @@ function getSystemPrompt() {
 function getUserPrompt(question, promptOptions) {
     return [
         timePrompt(),
-        question
+        `Question: ${question}`,
+        userPromptEnding
     ].join('\n\n');
 } 
 
